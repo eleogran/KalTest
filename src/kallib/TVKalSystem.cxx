@@ -49,14 +49,21 @@ TVKalSystem::~TVKalSystem()
 
 Bool_t TVKalSystem::AddAndFilter(TVKalSite &next)
 {
+
+   std::cout << "[TVKalSystem::AddAndFilter]" << std::endl;
+   GetState(TVKalSite::kFiltered).GetCovMat().DebugPrint(std::cout);
+
    SetCurInstancePtr(this);
+
+   std::cout << "[TVKalSystem::AddAndFilter]" << std::endl;
+   GetState(TVKalSite::kFiltered).GetCovMat().DebugPrint(std::cout);
 
    //
    // Propagate current state to the next site
    //
 
    GetState(TVKalSite::kFiltered).Propagate(next);
-   
+
    //
    // Calculate new pull and gain matrix
    //

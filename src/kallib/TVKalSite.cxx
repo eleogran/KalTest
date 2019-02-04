@@ -57,14 +57,20 @@ Bool_t TVKalSite::Filter()
 {
    // prea and preC should be preset by TVKalState::Propagate()
    TVKalState &prea = GetState(TVKalSite::kPredicted);
+   prea.DebugPrint(std::cout, "prea");
    TKalMatrix h = fM;
+   fM.DebugPrint(std::cout, "fM");
    if (!CalcExpectedMeasVec(prea,h)) return kFALSE;
+   h.DebugPrint(std::cout, "h");
    TKalMatrix pull  = fM - h;
+   pull.DebugPrint(std::cout, "pull");
    TKalMatrix preC  = GetState(TVKalSite::kPredicted).GetCovMat();
+   preC.DebugPrint(std::cout, "preC");
 
    // Calculate fH and fHt
 
    if (!CalcMeasVecDerivative(prea,fH)) return kFALSE;
+   fH.DebugPrint(std::cout, "fH");
    fHt = TKalMatrix(TKalMatrix::kTransposed, fH);
 
    // Calculate covariance matrix of residual
@@ -76,6 +82,7 @@ Bool_t TVKalSite::Filter()
 
    TKalMatrix preCinv = TKalMatrix(TKalMatrix::kInverted, preC);
    TKalMatrix G       = TKalMatrix(TKalMatrix::kInverted, fV);
+   //G.DebugPrint(std::cout, "G");
 
    // Calculate filtered state vector
 
@@ -88,6 +95,7 @@ Bool_t TVKalSite::Filter()
    TKalMatrix av     = prea + Kpull;
    TVKalState &a     = CreateState(av,curC,TVKalSite::kFiltered);
    TVKalState *aPtr  = &a;
+   a.DebugPrint(std::cout, "a");
 
    Add(aPtr);
    SetOwner();

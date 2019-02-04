@@ -117,6 +117,8 @@ Int_t TVSurface::CalcXingPointWith(const TVTrack  &hel,
      }
    }
    
+   std::cout << "[CalcXingPointWith] xx (x,y,z) = (" << xx.X() << ", " << xx.Y() << ", " << xx.Z() << ")" << std::endl;
+
    return (IsOnSurface(xx) ? 1 : 0);
 }
 

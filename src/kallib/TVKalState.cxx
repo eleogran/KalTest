@@ -103,8 +103,18 @@ void TVKalState::Propagate(TVKalSite &to)
    //    fF:    propagator derivative       : F_k-1   = (@f_k-1/@a_k-1)
    //    fQ:    process noise from k-1 to k : Q_k-1)
 
+   std::cout << "fC before propag" << std::endl;
+   fC.DebugPrint(std::cout, "fC");
+
    TVKalState &prea    = MoveTo(to,fF,fQ);
    TVKalState *preaPtr = &prea;
+
+   std::cout << "fC after moveto" << std::endl;
+   fC.DebugPrint(std::cout, "fC");
+
+   std::cout << "[TVKalState::Propagate] cov from prea" << std::endl;
+   TKalMatrix covFromPrea = prea.GetCovMat();
+   covFromPrea.DebugPrint(std::cout, "covFromPrea");
 
    fFt = TKalMatrix(TKalMatrix::kTransposed, fF);
 
@@ -112,9 +122,18 @@ void TVKalState::Propagate(TVKalSite &to)
 
    TKalMatrix preC = fF * fC * fFt + fQ;
 
+   std::cout << "[TVKalState::Propagate] preC calculation" << std::endl;
+   std::cout << "preC = fF * fC * fFt + fQ" << std::endl;
+   fF.DebugPrint(std::cout, "fF");
+   fC.DebugPrint(std::cout, "fC");
+   fQ.DebugPrint(std::cout, "fQ");
+
+
    // Set predicted state vector and covariance matrix to next site
 
    prea.SetCovMat(preC);
+   preC.DebugPrint(std::cout, "preC from Propagate");
+
    to.Add(preaPtr);
    to.SetOwner();
 }
